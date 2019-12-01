@@ -82,7 +82,8 @@ intro(screen)
 
 r = Ball(20, 20, 4, 4, (255, 0, 0), "红球")
 g = Ball(124, 352, 4, 4, (0, 255, 0), "绿球")
-l = [r, g]
+b = Ball(542, 234, 4, 4, (0, 0, 255), "蓝球")
+l = [r, g, b]
 
 blackhole = pygame.draw.circle(screen, (0, 0, 0), (320, 240), 75)
 
@@ -128,8 +129,8 @@ while True:
     screen.fill([255, 255, 255])
     t2 = pygame.time.get_ticks()
 
-    if r.score >= 5 and g.score >= 5:
-        pygame.draw.circle(screen, (255, 255, 0), (320, 240), 75)
+    if r.score >= 5 and g.score >= 5 and b.score >= 5:
+        pygame.draw.circle(screen, (255, 255, 255), (320, 240), 75)
         s = txt_img(None, 45, 'You Win!', (0, 0, 0))
         screen.blit(s, (260, 225))
         pygame.display.update()
@@ -145,22 +146,28 @@ while True:
     # 对每个球进行检测
     for i in range(len(l)):
         l[i].update(screen)
-        s = txt_img('simhei', 24, l[i].name + '得分: ' + str(l[i].score), (0, 0, 0))
+        s = txt_img('simhei', 24, l[i].name +
+                    '得分: ' + str(l[i].score), (0, 0, 0))
         screen.blit(s, (0, i * 75 + 25))
 
-        xs = txt_img('simhei', 24, l[i].name + '的X速度: ' + str(l[i].xs), (0, 0, 0))
+        xs = txt_img('simhei', 24, l[i].name +
+                     '的X速度: ' + str(l[i].xs), (0, 0, 0))
         screen.blit(xs, (0, i * 75 + 50))
 
-        ys = txt_img('simhei', 24, l[i].name + '的Y速度: ' + str(l[i].ys), (0, 0, 0))
+        ys = txt_img('simhei', 24, l[i].name +
+                     '的Y速度: ' + str(l[i].ys), (0, 0, 0))
         screen.blit(ys, (0, i * 75 + 75))
 
-    blackhole = pygame.draw.circle(screen, (r.bhcolor, g.bhcolor, 0), (320, 240), 75)
+    blackhole = pygame.draw.circle(
+        screen, (r.bhcolor, g.bhcolor, b.bhcolor), (320, 240), 75)
 
-    t = txt_img('simhei', 24, '倒计时: ' + str((60000 - (t2 - start)) / 1000), (0, 0, 0))
+    t = txt_img('simhei', 24, '倒计时: ' +
+                str((60000 - (t2 - start)) / 1000), (0, 0, 0))
 
     screen.blit(t, (0, 0))
 
-    info = txt_img('simhei', 24, '右键 - 改变速度    ESC - 退出游戏    F11 - 全屏', (0, 0, 0))
+    info = txt_img(
+        'simhei', 24, '右键 - 改变速度    ESC - 退出游戏    F11 - 全屏', (0, 0, 0))
 
     screen.blit(info, (0, 450))
 
