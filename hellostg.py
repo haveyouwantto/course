@@ -198,7 +198,7 @@ class Event:
 
 class EnemyEvent(Event):
     def __init__(self, tick, enemy):
-        Event.__init__(self, "enemy", tick)
+        Event.__init__(self, "spawn_enemy", tick)
         self.enemy = enemy
 
     def run(self):
@@ -219,22 +219,12 @@ class EventList:
     def sort(self):
         self.events.sort(key=lambda event: event.tick)
 
-    def update(self):
-        pass
-
-
-class EnemyEventList(EventList):
-    def __init__(self, sprite_group):
-        EventList.__init__(self)
-        self.events = []
-        self.tick = 0
-        self.sprite_group = sprite_group
-
-    def update(self):
+    def update(self, sprite_group):
         self.tick += 1
         while len(self.events) != 0 and self.events[0].tick == self.tick:
-            self.sprite_group.add(self.events[0].run())
-            self.events.pop(0)
+            if self.events[0].type == "spawn_enemy":
+                sprite_group.add(self.events[0].run())
+                self.events.pop(0)
 
 
 class STG:
@@ -276,7 +266,7 @@ class STG:
         self.enemies = pygame.sprite.Group()
         self.player_bullets = pygame.sprite.Group()
 
-        self.enemy_events = EnemyEventList(self.enemies)
+        self.enemy_events = EventList()
 
         for i in range(1, 24):
             for j in range(1, 4):
@@ -313,7 +303,7 @@ class STG:
 
         self.player.update(self.player_bullets)
 
-        self.enemy_events.update()
+        self.enemy_events.update(self.enemies)
 
         self.enemies.update()
         self.enemies.draw(self.game_area)
@@ -429,7 +419,7 @@ class STG:
         info = txt_img('simhei', int(16 * self.size_multiplier), "{0:.2f}fps".format(self.clock.get_fps()), (0, 0, 0))
         info_rect = info.get_rect()
         self.screen.blit(info, (
-            (640*self.size_multiplier)-info_rect.width, (480*self.size_multiplier)-info_rect.height))
+            (640 * self.size_multiplier) - info_rect.width, (480 * self.size_multiplier) - info_rect.height))
 
 
 class Launcher:
